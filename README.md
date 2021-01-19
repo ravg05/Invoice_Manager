@@ -1,1 +1,1 @@
-Invoice Manager
+Invoice Manager API
