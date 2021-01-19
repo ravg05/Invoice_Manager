@@ -1,0 +1,27 @@
+This document contains information for the Hubdoc Document Intake exercise
+
+Usage: 
+	Server side:
+	npm install (import node modules)
+	npm start
+
+	Client side:
+		Get Request:
+		curl -XGET http://localhost:3000/document/1
+
+		Post Request (*Note this is slightly different than the ex on GitLab, there is no @ after file=":
+		curl -F 'file="invoices/Invoice1.pdf"' -F 'email=user@domain.com' localhost:3000/upload
+
+Design Choices
+- I stored data into a json file. I found this was easier to store data and also easier to satisfy the requirement to return a json object, and I didn't want to add additional dependancies.
+As invoices get larger, a db would be more useful in this situation for querying records
+- I separated the upload functionality into 2 functions(1-parseData, 2-storeData). The parseData function strictly parses the PDF document and returns a JSON object where the storeData function appends 
+data to a JSON file. This will allow it to be more modular and useful in terms of scalability. In the case of updating an invoice there will be no reason to parseData again.
+- I used poppler as suggested to convert the PDF -> text
+- PDF data will be parsed and stored into data.json
+
+Assumptions:
+- The PDF spacing stays consistent as once the PDF is translated to a converted text array, the key value is differed in the array by 2 indexes
+- The upload requirement was unclear whether the file needs to be actually uploaded. I took the assumption as it is just a reference to the location in the folder 'invoices'
+- The currency only searches for CAD,USD, GBP as those were the ones I've found from the invoices
+- Tax shows up in the form of 'Tax 0%' or 'GST 13%'. It will only search for those 2 strings to set the value 
